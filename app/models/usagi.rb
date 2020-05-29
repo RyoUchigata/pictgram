@@ -1,0 +1,4 @@
+class Usagi < Animal
+
+
+end
