@@ -1,0 +1,59 @@
+<div class="topic-index-wrapper">
+  <div class="container">
+    <% @topics.each do |topic| %>
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="topic-index-single">
+            <h2 class="topic-author">
+              <%= topic.user.name %>
+            </h2>
+            <%= image_tag topic.image.url %>
+            <% if !topic.favorite_users.include?(current_user) %>
+              <%= link_to favorites_path(topic_id: topic.id), method: :post do %>
+                <i class="far fa-heart fa-2x topic-index-icon"></i>
+              <% end %>
+            <% else %>
+              <%= link_to favorites_path(topic_id: topic.id), method: :delete do %>
+                <i class="fas fa-heart fa-2x topic-index-icon"></i>
+              <% end %>
+            <% end %>
+            <label>
+              <%= topic.favorite_users.count %>
+            </label>
+            
+            <%= image_tag('icons/comment.png') , class: 'topic-index-icon add-comment' %>
+
+            <p class="topic-text">
+              <%= topic.description %>
+            </p>
+
+            <div class="comment-area">
+              <h4 class="comment-title">コメント</h4>
+              <% comments = topic.comments %>
+               <div class="comment-body-area">
+                <% if comments.present? %>
+                  <% comments.each do |comment| %>
+                    <p class="comment-body">
+                      <%= comment.body %>
+                    </p>
+                  <% end %>
+                <% else %>
+                  <p class="comment-body">
+                  <%= "コメントはありません" %>
+                </p>
+                <% end %>
+               </div>
+               <%= form_for @comment do |f| %>
+                <div class="form-group comment-form">
+                  <%= f.text_area :body, class: 'form-control' %>
+                  <%= f.submit 'コメントする', class: 'btn btn-black btn-block' %>
+                  <%= f.hidden_field :topic_id, :value => topic.id %>
+                </div>
+            <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
