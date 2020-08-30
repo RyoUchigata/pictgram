@@ -12,12 +12,54 @@
 //
 //= require rails-ujs
 //= require activestorage
-//= require turbolinks
 //= require bootstrap-sprockets
 //= require_tree .
 //= require jquery
 
-$(".add-comment").click(function () {
-    alert("a")
-    $(".comment-form").slideUp();
-  });
+
+$(function(){
+    $(".add-comment").click(function () {
+        $comment_area = $(this).parent().siblings(".comment-area")
+        if ( $comment_area.css("display") == "none" ) {
+            $comment_area.slideDown();
+        } else {
+            $comment_area.slideUp();
+        }
+    });
+
+    $('.search-input').focus(function(){
+        $(this).parent().addClass('focus');
+      }).blur(function(){
+        $(this).parent().removeClass('focus');
+      })
+
+      $('.search-form')
+        .css({
+            opacity: 0
+        })
+        .each(function(i){
+            $(this).show();
+            $(this).delay(300 * i)
+                .animate({
+                    left : '50%',
+                    opacity: 1
+                }, 700);
+        });
+
+        setTimeout(function(){
+            $('ul.delay-show li')
+        .css({
+            right: '40px',
+            opacity: 0
+        })
+        .each(function(i){
+            $(this).show();
+            $(this).delay(300 * i)
+                .animate({
+                    right : '0',
+                    opacity: 1
+                }, 700);
+        });
+        },1000);
+      
+});

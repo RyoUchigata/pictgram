@@ -1,27 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" display="none">
+  <symbol id="search" viewBox="0 0 32 32">
+    <path d="M 19.5 3 C 14.26514 3 10 7.2651394 10 12.5 C 10 14.749977 10.810825 16.807458 12.125 18.4375 L 3.28125 27.28125 L 4.71875 28.71875 L 13.5625 19.875 C 15.192542 21.189175 17.250023 22 19.5 22 C 24.73486 22 29 17.73486 29 12.5 C 29 7.2651394 24.73486 3 19.5 3 z M 19.5 5 C 23.65398 5 27 8.3460198 27 12.5 C 27 16.65398 23.65398 20 19.5 20 C 15.34602 20 12 16.65398 12 12.5 C 12 8.3460198 15.34602 5 19.5 5 z" />
+  </symbol>
+</svg>
+
+<div class="side-menu" > 
+  <div class="inner-menu">
+    <div class="search-form-area">
+
+      <%= form_with url: topics_path, method: :get, local: true, class: "search-form" do |f| %>
+        <%= f.text_field "search[title]", :value => session[:search_params][:title], :placeholder => "Title", :class => "search-input" %>
+        <button type="submit" class="search-button">
+          <svg class="submit-button">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#search"></use>
+          </svg>
+        </button>
+      <% end %>
+    </div>
+
+    <div id="wrap">
+        <ul class="order-list delay-show">
+          <li>
+            <%= link_to "新着順", topics_path(order: "new"), class: session[:order_param] == "new" || session[:order_param].blank? ? 'active' : "" %>
+          </li>
+          <li>
+            <%= link_to "古い順", topics_path(order: "old"), class: session[:order_param] == "old" ? 'active' : "" %>
+          </li>
+          <li>
+            <%= link_to "人気順", topics_path(order: "favolite"), class: session[:order_param] == "favolite" ? 'active' : "" %>
+          </li>
+        </ul>
+      </div>
+  </div>
+</div>
+
+
 <div class="topic-index-wrapper">
   <div class="container">
     <% @topics.each do |topic| %>
       <div class="row">
         <div class="col-md-6 col-md-offset-3">
           <div class="topic-index-single">
-            <h2 class="topic-author">
-              <%= topic.user.name %>
-            </h2>
+          
+            <h4 class="topic-author">
+              <%= topic.title.present? ? topic.title : "タイトルなし" %>
+            </h4>
+
             <%= image_tag topic.image.url %>
-            <% if !topic.favorite_users.include?(current_user) %>
+
+            <div class="inner-row">
+              <div class="topic-author">
+                投稿者　：<%= topic.user.name %>
+              </div>
+              <div class="topic-createddate">
+                投稿日時：<%= topic.created_at.strftime('%Y/%m/%d %H:%M:%S') %>
+              </div>
+            </div>
+
+            <div class="inner-row">
+              <% if !topic.favorite_users.include?(current_user) %>
               <%= link_to favorites_path(topic_id: topic.id), method: :post do %>
                 <i class="far fa-heart fa-2x topic-index-icon"></i>
               <% end %>
-            <% else %>
-              <%= link_to favorites_path(topic_id: topic.id), method: :delete do %>
-                <i class="fas fa-heart fa-2x topic-index-icon"></i>
+              <% else %>
+                <%= link_to favorites_path(topic_id: topic.id), method: :delete do %>
+                  <i class="fas fa-heart fa-2x topic-index-icon"></i>
+                <% end %>
               <% end %>
-            <% end %>
-            <label>
-              <%= topic.favorite_users.count %>
-            </label>
-            
-            <%= image_tag('icons/comment.png') , class: 'topic-index-icon add-comment' %>
+              <label>
+                <%= topic.favorite_users.count %>
+              </label>        
+              <%= image_tag 'icons/comment.png', class: 'add-comment topic-index-icon' %>
+            </div>
 
             <p class="topic-text">
               <%= topic.description %>

@@ -1,0 +1,6 @@
+ja:
+  activerecord:
+    attributes:
+      topics:
+        description: 本文
+        title: タイトル　

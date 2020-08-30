@@ -1,7 +1,10 @@
 class TopicsController < ApplicationController
 
   def index
-    @topics = Topic.all.includes(:favorite_users)
+    session[:order_param]   = order_param
+    session[:search_params] = search_params
+
+    @topics = Topic.get_list(search_params, order_param)
     @comment = Comment.new
   end
 
@@ -22,6 +25,14 @@ class TopicsController < ApplicationController
 
   private
   def topic_params
-    params.require(:topic).permit(:image, :description)
+    params.require(:topic).permit(:image, :description, :title)
+  end
+
+  def order_param
+    params[:order].present? ? params[:order] : session[:order_param]
+  end
+
+  def search_params
+    params[:search].present? ? params[:search] : session[:search_params]
   end
 end
