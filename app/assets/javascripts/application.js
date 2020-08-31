@@ -10,11 +10,12 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require jquery
 //= require rails-ujs
 //= require activestorage
 //= require bootstrap-sprockets
 //= require_tree .
-//= require jquery
+
 
 
 $(function(){
@@ -47,7 +48,7 @@ $(function(){
         });
 
         setTimeout(function(){
-            $('ul.delay-show li')
+            $('ul.order-list li')
         .css({
             right: '40px',
             opacity: 0
@@ -60,6 +61,21 @@ $(function(){
                     opacity: 1
                 }, 700);
         });
-        },1000);
-      
+        },1000);  
+
+        setTimeout(function(){
+            $('#pagenate')
+        .css({
+            right: '40px',
+            opacity: 0
+        })
+        .each(function(i){
+            $(this).show();
+            $(this).delay(300 * i)
+                .animate({
+                    left : '0',
+                    opacity: 1
+                }, 1000);
+        });
+        },1400);  
 });

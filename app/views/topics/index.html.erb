@@ -31,6 +31,9 @@
           </li>
         </ul>
       </div>
+      <div id="pagenate">
+        <%= paginate @topics %>
+      </div>
   </div>
 </div>
 
@@ -67,40 +70,23 @@
                   <i class="fas fa-heart fa-2x topic-index-icon"></i>
                 <% end %>
               <% end %>
-              <label>
+              <label id="favorite_count">
                 <%= topic.favorite_users.count %>
               </label>        
               <%= image_tag 'icons/comment.png', class: 'add-comment topic-index-icon' %>
+              <label id=<%= "comment_count_#{topic.id}" %>>
+                <%= topic.comments.count %>
+              </label>   
             </div>
 
             <p class="topic-text">
               <%= topic.description %>
             </p>
 
-            <div class="comment-area">
-              <h4 class="comment-title">コメント</h4>
-              <% comments = topic.comments %>
-               <div class="comment-body-area">
-                <% if comments.present? %>
-                  <% comments.each do |comment| %>
-                    <p class="comment-body">
-                      <%= comment.body %>
-                    </p>
-                  <% end %>
-                <% else %>
-                  <p class="comment-body">
-                  <%= "コメントはありません" %>
-                </p>
-                <% end %>
-               </div>
-               <%= form_for @comment do |f| %>
-                <div class="form-group comment-form">
-                  <%= f.text_area :body, class: 'form-control' %>
-                  <%= f.submit 'コメントする', class: 'btn btn-black btn-block' %>
-                  <%= f.hidden_field :topic_id, :value => topic.id %>
-                </div>
-            <% end %>
+            <div class="comment-area" id=<%= "topic_comment_#{topic.id}" %>>
+              <%= render "comment", topic: topic %>
             </div>
+
           </div>
         </div>
       </div>
