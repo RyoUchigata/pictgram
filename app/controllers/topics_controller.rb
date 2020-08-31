@@ -5,7 +5,7 @@ class TopicsController < ApplicationController
     session[:search_params] = search_params
 
     @topics = Topic.get_list(search_params, order_param)
-    @comment = Comment.new
+    @topics = @topics.page(params[:page]).per(5)
   end
 
   def new
