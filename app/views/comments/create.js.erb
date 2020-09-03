@@ -1,3 +1,5 @@
 $("#" + "<%= "topic_comment_#{@topic.id}" %>").html("<%= escape_javascript(render 'topics/comment', topic: @topic) %>");
 $("#" + "<%= "comment_count_#{@topic.id}" %>").html(<%= @topic.comments.count %>)
 
+// コメント登録時さらに表示を消す
+$("#" + "<%= "topic_comment_#{@topic.id}" %>").find(".more").hide();

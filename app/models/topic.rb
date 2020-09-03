@@ -27,6 +27,8 @@ class Topic < ApplicationRecord
         topic = topic.order(id: "ASC")
       when "favolite"
         topic = topic.select('topics.*', 'count(favorites.id) AS favs').left_joins(:favorites).group('topics.id').order('favs desc')
+      when "comment"
+        topic = topic.select('topics.*', 'count(comments.id) AS coms').left_joins(:comments).group('topics.id').order('coms desc')
       end
     end
     

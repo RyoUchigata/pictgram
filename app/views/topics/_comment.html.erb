@@ -7,17 +7,23 @@
         <%= comment.body %>
     </p>
     <% end %>
+    <div class="more">
+        <p>
+            さらに表示...
+        </p>
+    </div>
+    
 <% else %>
     <p class="comment-body">
-    <%= "コメントはありません" %>
-</p>
+        <%= "コメントはありません" %>
+    </p>
 <% end %>
 </div>
 
 <%= form_for Comment.new, remote: true do |f| %>
 <div class="form-group comment-form">
     <%= f.text_area :body, class: 'form-control' %>
-    <%= f.submit 'コメントする', class: 'btn btn-black btn-block' %>
+    <%= f.submit 'コメントする', id: "comment_submit", class: 'btn btn-black btn-block', disabled: "disabled"%>
     <%= f.hidden_field :topic_id, :value => topic.id %>
 </div>
 <% end %>
