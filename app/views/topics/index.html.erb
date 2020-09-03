@@ -27,7 +27,10 @@
             <%= link_to "古い順", topics_path(order: "old"), class: session[:order_param] == "old" ? 'active' : "" %>
           </li>
           <li>
-            <%= link_to "人気順", topics_path(order: "favolite"), class: session[:order_param] == "favolite" ? 'active' : "" %>
+            <%= link_to "いいねの多い順", topics_path(order: "favolite"), class: session[:order_param] == "favolite" ? 'active' : "" %>
+          </li>
+          <li>
+            <%= link_to "コメントの多い順", topics_path(order: "comment"), class: session[:order_param] == "comment" ? 'active' : "" %>
           </li>
         </ul>
       </div>
@@ -40,56 +43,65 @@
 
 <div class="topic-index-wrapper">
   <div class="container">
-    <% @topics.each do |topic| %>
-      <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-          <div class="topic-index-single">
-          
-            <h4 class="topic-author">
-              <%= topic.title.present? ? topic.title : "タイトルなし" %>
-            </h4>
+    <% if @topics.present? %>
+      <% @topics.each do |topic| %>
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div class="topic-index-single">
+            
+              <h4 class="topic-author">
+                <%= topic.title.present? ? topic.title : "タイトルなし" %>
+              </h4>
 
-            <%= image_tag topic.image.url %>
+              <%= image_tag topic.image.url %>
 
-            <div class="inner-row">
-              <div class="topic-author">
-                投稿者　：<%= topic.user.name %>
+              <div class="inner-row">
+                <div class="topic-author">
+                  投稿者　：<%= topic.user.name %>
+                </div>
+                <div class="topic-createddate">
+                  投稿日時：<%= topic.created_at.strftime('%Y/%m/%d %H:%M:%S') %>
+                </div>
               </div>
-              <div class="topic-createddate">
-                投稿日時：<%= topic.created_at.strftime('%Y/%m/%d %H:%M:%S') %>
-              </div>
-            </div>
 
-            <div class="inner-row">
-              <% if !topic.favorite_users.include?(current_user) %>
-              <%= link_to favorites_path(topic_id: topic.id), method: :post do %>
-                <i class="far fa-heart fa-2x topic-index-icon"></i>
-              <% end %>
-              <% else %>
-                <%= link_to favorites_path(topic_id: topic.id), method: :delete do %>
-                  <i class="fas fa-heart fa-2x topic-index-icon"></i>
+              <div class="inner-row">
+                <% if !topic.favorite_users.include?(current_user) %>
+                  <%= link_to favorites_path(topic_id: topic.id), class: 'add-favorite', method: :post do %>
+                    <i class="far fa-heart fa-2x topic-index-icon add-fa vorite"></i>
+                  <% end %>
+                <% else %>
+                  <%= link_to favorites_path(topic_id: topic.id), class: 'add-favorite', method: :delete do %>
+                    <i class="fas fa-heart fa-2x topic-index-icon add-favorite"></i>
+                  <% end %>
                 <% end %>
-              <% end %>
-              <label id="favorite_count">
-                <%= topic.favorite_users.count %>
-              </label>        
-              <%= image_tag 'icons/comment.png', class: 'add-comment topic-index-icon' %>
-              <label id=<%= "comment_count_#{topic.id}" %>>
-                <%= topic.comments.count %>
-              </label>   
+                <label id="favorite_count">
+                  <%= topic.favorite_users.count %>
+                </label>        
+                
+                
+                <i class="fas fa-comment fa-2x topic-index-icon add-comment"></i>
+                
+                <label id=<%= "comment_count_#{topic.id}" %>>
+                  <%= topic.comments.count %>
+                </label>   
+              </div>
+
+              <p class="topic-text">
+                <%= topic.description %>
+              </p>
+
+              <div class="comment-area" id=<%= "topic_comment_#{topic.id}" %>>
+                <%= render "comment", topic: topic %>
+              </div>
+
             </div>
-
-            <p class="topic-text">
-              <%= topic.description %>
-            </p>
-
-            <div class="comment-area" id=<%= "topic_comment_#{topic.id}" %>>
-              <%= render "comment", topic: topic %>
-            </div>
-
           </div>
         </div>
-      </div>
+      <% end %>
+    <% else %>
+    
     <% end %>
+
+    
   </div>
 </div>

@@ -19,6 +19,7 @@
 
 
 $(function(){
+    // コメント開閉
     $(".add-comment").click(function () {
         $comment_area = $(this).parent().siblings(".comment-area")
         if ( $comment_area.css("display") == "none" ) {
@@ -28,6 +29,7 @@ $(function(){
         }
     });
 
+    // 検索、並び替えアニメーション
     $('.search-input').focus(function(){
         $(this).parent().addClass('focus');
       }).blur(function(){
@@ -77,5 +79,27 @@ $(function(){
                     opacity: 1
                 }, 1000);
         });
-        },1400);  
+        },1400);
+
+        // コメント非活性
+        $(document).on('input', '#comment_body', function(e) {
+            if ($(this).val() == 0 ) {
+                $(this).siblings('#comment_submit').prop("disabled", true);
+            } else{
+                $(this).siblings('#comment_submit').prop("disabled", false);
+            }
+        });
+
+
+        // コメント「さらに表示」
+        $('.comment-body-area').each(function(i,e){
+            moreNum = 5;
+            $(e).children('.comment-body:nth-child(n + ' + (moreNum + 1) + ')').addClass('is-hidden');
+            $(e).children('.more').on('click', function() {
+                $(e).children('.comment-body.is-hidden').slice(0, moreNum).removeClass('is-hidden');   
+                if ($(e).children('.comment-body.is-hidden').length == 0) {
+                    $(e).children('.more').fadeOut();
+                }
+            });
+        });
 });
